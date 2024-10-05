@@ -15,11 +15,9 @@ public function __construct()
 $this->conferences = [
 ['id' => 0, 'title' => 'Test 1', 'description' => 'Test description 1', 'date_time' => '2024-10-07T22:00', 'location' => 'Kaunas'],
 ['id' => 1, 'title' => 'Test 2', 'description' => 'Test description 2', 'date_time' => '2024-10-08T22:00', 'location' => 'Vilnius'],
-// Pridėkite daugiau konferencijų, jei reikia
 ];
 }
 
-    // App\Http\Controllers\ConferenceController.php
 
     public function index()
     {
