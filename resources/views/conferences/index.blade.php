@@ -26,6 +26,11 @@
                 <td>{{ \Carbon\Carbon::parse($conference['date_time'])->format('Y-m-d H:i') }}</td>
                 <td>{{ $conference['location'] }}</td>
             </tr>
+            <td>
+                <a href="{{ route('conferences.edit', $index) }}" class="btn btn-warning">Redaguoti</a>
+                <a href="{{ route('conferences.show', $index) }}" class="btn btn-info">Peržiūrėti</a>
+            </td>
+
         @endforeach
         </tbody>
     </table>

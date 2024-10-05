@@ -58,5 +58,49 @@ class ConferenceController extends Controller
         // Peradresuoti atgal į konferencijų sąrašą su sėkmingo pranešimo sesijoje
         return redirect()->route('conferences.index')->with('success', 'Konferencija sėkmingai sukurta.');
     }
+    public function edit($id)
+    {
+        // Gauti visas konferencijas iš sesijos
+        $conferences = session('conferences', []);
 
+        // Patikrinti, ar nurodytas ID egzistuoja
+        if (!isset($conferences[$id])) {
+            abort(404);
+        }
+
+        // Grąžinti redagavimo vaizdą su konferencijos duomenimis
+        return view('conferences.edit', ['conference' => $conferences[$id], 'id' => $id]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        // Patvirtinti formos duomenis
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'date_time' => 'required|date',
+            'location' => 'required|string|max:255',
+        ]);
+
+        // Gauti visas konferencijas iš sesijos
+        $conferences = session('conferences', []);
+
+        // Patikrinti, ar nurodytas ID egzistuoja
+        if (!isset($conferences[$id])) {
+            abort(404);
+        }
+
+        // Atnaujinti konferencijos duomenis
+        $conferences[$id] = [
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+            'date_time' => $request->input('date_time'),
+            'location' => $request->input('location'),
+        ];
+
+        // Išsaugoti atnaujintas konferencijas į sesiją
+        session(['conferences' => $conferences]);
+
+        return redirect()->route('conferences.index')->with('success', 'Konferencija sėkmingai atnaujinta!');
+    }
 }
