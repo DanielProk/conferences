@@ -1,12 +1,26 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\Conference; // Importuoti Conference modelį
 use Illuminate\Http\Request;
 
 class ConferenceController extends Controller
 {
+    use \Illuminate\Foundation\Validation\ValidatesRequests;
+// Pridėkite šį kintamąjį
+protected $conferences = [];
+
+public function __construct()
+{
+// Pradiniai konferencijų duomenys
+$this->conferences = [
+['id' => 0, 'title' => 'Test 1', 'description' => 'Test description 1', 'date_time' => '2024-10-07T22:00', 'location' => 'Kaunas'],
+['id' => 1, 'title' => 'Test 2', 'description' => 'Test description 2', 'date_time' => '2024-10-08T22:00', 'location' => 'Vilnius'],
+// Pridėkite daugiau konferencijų, jei reikia
+];
+}
+
+    // App\Http\Controllers\ConferenceController.php
+
     public function index()
     {
         // Gauti konferencijas iš sesijos
@@ -14,6 +28,8 @@ class ConferenceController extends Controller
 
         return view('conferences.index', compact('conferences'));
     }
+
+
 
     public function show($id)
     {
@@ -44,20 +60,27 @@ class ConferenceController extends Controller
             'location' => 'required|string|max:255',
         ]);
 
-        // Sukurti konferenciją - šiuo atveju galime ją saugoti sesijoje
+        // Gauti konferencijų sąrašą iš sesijos arba sukurti naują
+        $conferences = session('conferences', []);
+
+        // Sukurti naują konferenciją
         $conference = [
+            'id' => count($conferences) + 1, // Gauti naują id
             'title' => $request->input('title'),
             'description' => $request->input('description'),
             'date_time' => $request->input('date_time'),
             'location' => $request->input('location'),
         ];
 
-        // Naudojame sesiją, kad saugotume konferencijas
-        session()->push('conferences', $conference);
+        // Pridėti naują konferenciją į sąrašą
+        $conferences[] = $conference;
 
-        // Peradresuoti atgal į konferencijų sąrašą su sėkmingo pranešimo sesijoje
+        // Išsaugoti konferencijas sesijoje
+        session(['conferences' => $conferences]);
+
         return redirect()->route('conferences.index')->with('success', 'Konferencija sėkmingai sukurta.');
     }
+
     public function edit($id)
     {
         // Gauti visas konferencijas iš sesijos
@@ -74,7 +97,7 @@ class ConferenceController extends Controller
 
     public function update(Request $request, $id)
     {
-        // Patvirtinti formos duomenis
+        // Validuoti pateiktus duomenis
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -82,25 +105,46 @@ class ConferenceController extends Controller
             'location' => 'required|string|max:255',
         ]);
 
-        // Gauti visas konferencijas iš sesijos
+        // Gauti konferencijų sąrašą iš sesijos
         $conferences = session('conferences', []);
 
-        // Patikrinti, ar nurodytas ID egzistuoja
-        if (!isset($conferences[$id])) {
-            abort(404);
+        // Patikrinti, ar konferencija egzistuoja
+        if (isset($conferences[$id])) {
+            // Atnaujinti konferencijos informaciją
+            $conferences[$id]['title'] = $request->input('title');
+            $conferences[$id]['description'] = $request->input('description');
+            $conferences[$id]['date_time'] = $request->input('date_time');
+            $conferences[$id]['location'] = $request->input('location');
+
+            // Išsaugoti atnaujintą sąrašą sesijoje
+            session(['conferences' => $conferences]);
+
+            return redirect()->route('conferences.index')->with('success', 'Konferencija sėkmingai atnaujinta.');
         }
 
-        // Atnaujinti konferencijos duomenis
-        $conferences[$id] = [
-            'title' => $request->input('title'),
-            'description' => $request->input('description'),
-            'date_time' => $request->input('date_time'),
-            'location' => $request->input('location'),
-        ];
-
-        // Išsaugoti atnaujintas konferencijas į sesiją
-        session(['conferences' => $conferences]);
-
-        return redirect()->route('conferences.index')->with('success', 'Konferencija sėkmingai atnaujinta!');
+        return redirect()->route('conferences.index')->with('error', 'Konferencija nerasta.');
     }
+
+
+
+
+
+    public function destroy($id)
+    {
+        // Gauti konferencijų sąrašą iš sesijos
+        $conferences = session('conferences', []);
+
+        // Patikrinti, ar konferencija egzistuoja ir pašalinti
+        if (isset($conferences[$id])) {
+            unset($conferences[$id]);
+
+            // Atnaujinti sesiją
+            session(['conferences' => $conferences]);
+
+            return redirect()->route('conferences.index')->with('success', 'Konferencija sėkmingai pašalinta.');
+        }
+
+        return redirect()->route('conferences.index')->with('error', 'Konferencija nerasta.');
+    }
+
 }
