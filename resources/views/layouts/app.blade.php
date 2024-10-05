@@ -3,13 +3,17 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title')</title>
-    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+    <title>{{ config('app.name', 'Laravel') }}</title>
+    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
 </head>
 <body>
-<div class="container">
-    @yield('content')
+<div id="app">
+    @include('layouts.navbar') {{-- Arba pridėkite savo navigacijos šabloną --}}
+    <main class="py-4">
+        @yield('content')
+    </main>
 </div>
+
 <script src="{{ mix('js/app.js') }}"></script>
 </body>
 </html>
