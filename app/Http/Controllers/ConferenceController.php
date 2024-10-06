@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-
+use \Illuminate\Foundation\Validation\ValidatesRequests;
 class ConferenceController extends Controller
 {
-    use \Illuminate\Foundation\Validation\ValidatesRequests;
 // Pridėkite šį kintamąjį
 protected $conferences = [];
 
@@ -45,6 +44,7 @@ $this->conferences = [
 
     public function create()
     {
+
         return view('conferences.create');
     }
 
@@ -63,7 +63,7 @@ $this->conferences = [
 
         // Sukurti naują konferenciją
         $conference = [
-            'id' => count($conferences) + 1, // Gauti naują id
+            'id' => count($conferences), // Use count as ID starting from 0
             'title' => $request->input('title'),
             'description' => $request->input('description'),
             'date_time' => $request->input('date_time'),

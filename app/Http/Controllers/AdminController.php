@@ -8,6 +8,6 @@ class AdminController extends Controller
 {
     public function index()
     {
-        return view('admin.dashboard'); // sukurkite admin/dashboard.blade.php
+        return view('admin.dashboard');
     }
 }

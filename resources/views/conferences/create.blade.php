@@ -24,8 +24,8 @@
                             </div>
 
                             <div class="form-group mb-3">
-                                <label for="datetime">Data ir laikas</label>
-                                <input type="datetime-local" name="datetime" id="datetime" class="form-control" required>
+                                <label for="date_time">Data ir laikas</label>
+                                <input type="datetime-local" name="date_time" id="date_time" class="form-control" required>
                             </div>
 
                             <div class="form-group mb-3">

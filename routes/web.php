@@ -22,6 +22,8 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 // Pagrindinis puslapis
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// Sistemos administratoriaus puslapis
-Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+//// Sistemos administratoriaus puslapis
+//Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
 
+Route::post('/conferences/{id}/register', [ConferenceController::class, 'register'])->name('conferences.register');
+Route::resource('conferences', ConferenceController::class);
