@@ -22,7 +22,6 @@ class RegisterController extends Controller
 
         $user = $this->create($request->all());
 
-        // Prisijungti naują vartotoją
         auth()->login($user);
 
         return redirect()->route('home')->with('success', 'Registracija sėkminga!');
@@ -34,7 +33,7 @@ class RegisterController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|string|in:client,employee,admin', // Pridėkite vaidmenį kaip privalomą
+            'role' => 'required|string|in:client,employee,admin',
         ]);
     }
 

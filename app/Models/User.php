@@ -23,6 +23,11 @@ class User extends Authenticatable
     {
         return $this->role === 'client';
     }
+    public function conferences()
+    {
+        return $this->belongsToMany(Conference::class, 'conference_user');
+    }
+
     use HasFactory, Notifiable;
 
     /**

@@ -3,7 +3,7 @@ import $ from 'jquery';
 window.$ = window.jQuery = $;
 
 import flatpickr from 'flatpickr';
-import 'flatpickr/dist/flatpickr.css'; // Priklausomai nuo to, ar nori pridėti CSS stilius
+import 'flatpickr/dist/flatpickr.css';
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM fully loaded and parsed');

@@ -19,7 +19,6 @@ class LoginController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            // Sėkmingai prisijungus, nukreipti į namų puslapį
             return redirect()->route('home')->with('success', 'Prisijungimas sėkmingas!');
         }
 
